@@ -22,7 +22,7 @@ CREATE TABLE usuarios (
   cpf varchar(14) NOT NULL,
   cidade varchar(100) NOT NULL,
   estado varchar(100) NOT NULL,
-  telefone int(13) NOT NULL,
+  telefone int(13) NOT NULL
   
 );
 
@@ -35,7 +35,7 @@ MODIFY id int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 ```
 
-6 - Crie um arquivo config.php na raiz do seu projeto, est arquivo conterá todo código "genérico" do sistema para ser usado em outros diretórios e arquivos. Dentro de config.php cole o código a seguir:
+6 - Crie um arquivo config.php na raiz do seu projeto, este arquivo conterá todo código "genérico" do sistema para ser usado em outros diretórios e arquivos. Dentro de config.php cole o código a seguir:
 
 ```php
 <?php
@@ -161,7 +161,7 @@ function close_database($conn) {
 
 ```
 
-10 - Semelhante ao tópico anterior vamos criar o arquivo footer.php na pasta inc. Dentro do foot.php cole o código a seguir :
+10 - Semelhante ao tópico anterior vamos criar o arquivo footer.php na pasta inc. Dentro do footer.php cole o código a seguir :
 
 ```php
 
@@ -302,7 +302,7 @@ function find( $table = null, $id = null ) {
 function find_all( $table ) {
   return find($table);
 }
-
+?>
 ```
 16 - Crie um Arquivo index.php na paste usuarios, que concentrará toda marcação e dados da tabela. Cole o código a seguir
 
@@ -344,7 +344,9 @@ function find_all( $table ) {
 		<th>CPF</th>
 		<th>Telefone</th>
 		<th>Cidade</th>
-		<th>Opções</th>
+		<th>Estado</th>
+		
+		
 	</tr>
 </thead>
 <tbody>
@@ -354,7 +356,10 @@ function find_all( $table ) {
 		<td><?php echo $usuario['id']; ?></td>
 		<td><?php echo $usuario['nome']; ?></td>
 		<td><?php echo $usuario['cpf']; ?></td>
-		<td><?php echo $usuario['Cidade']; ?></td>
+		<td><?php echo $usuario['telefone']; ?></td>
+		<td><?php echo $usuario['cidade']; ?></td>
+		<td><?php echo $usuario['estado']; ?></td>
+		
 		<td class="actions text-right">
 			<a href="view.php?id=<?php echo $usuario['id']; ?>" class="btn btn-sm btn-success"><i class="fa fa-eye"></i> Visualizar</a>
 			<a href="edit.php?id=<?php echo $usuario['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i> Editar</a>
@@ -388,13 +393,12 @@ VALUES ('0', 'usuario1', '000000', '000000', '000000', '000000');
 
 ```php
 <?php
-
 function add() {
   if (!empty($_POST['usuario'])) {
     
     
     $usuario = $_POST['usuario'];
-   
+    
     
     save('usuarios', $usuario);
     header('location: index.php');
@@ -457,7 +461,7 @@ function add() {
 
 <?php include(FOOTER_TEMPLATE); ?>
 ```
-20 - Para finalizar a dição de usuario iremos agora implementar todo esses comandos no arquivo database.php. Cole o seguinte código:
+20 - Para finalizar a adição de usuario iremos agora implementar todo esses comandos no arquivo database.php Cole o seguinte código:
 ```php
 <?php
 
@@ -571,6 +575,7 @@ function edit() {
 
 <?php include(FOOTER_TEMPLATE); ?>
 
+```
 23 - Vamos Implementar a edição no banco de dados. Abra o database.php e cole o código a seguir:
 
 ```php
@@ -600,6 +605,155 @@ function update($table = null, $id = 0, $data = null) {
 }
 
 ```
+
+24 - Vamos criar a função de vizualizar as informaçoes do cliente. Dentro de usuarios no arquivo functions.php cole a função de vizulização a seguir:
+
+```php
+
+<?php
+
+function view($id = null) {
+  global $usuario;
+  $usuario = find('usuarios', $id);
+}
+?>
+
+
+```
+
+25 - Na paste usuarios crie um arquivo chamado view.php, esse arquivo renderizará toda a pagina de vizualização fazendo a busca na tabela pelo id do usuario.
+
+```php
+<?php 
+	require_once('functions.php'); 
+	view($_GET['id']);
+?>
+
+<?php include(HEADER_TEMPLATE); ?>
+
+<h2>Cliente de Id: <?php echo $usuario['id']; ?></h2>
+<hr>
+
+<?php if (!empty($_SESSION['message'])) : ?>
+	<div class="alert alert-<?php echo $_SESSION['type']; ?>"><?php echo $_SESSION['message']; ?></div>
+<?php endif; ?>
+
+<dl class="dl-horizontal">
+	<dt>Nome:</dt>
+	<dd><?php echo $usuario['nome']; ?></dd>
+
+	<dt>CPF:</dt>
+	<dd><?php echo $usuario['cpf']; ?></dd>
+
+	
+
+
+ 
+	<dt>Cidade:</dt>
+	<dd><?php echo $usuario['cidade']; ?></dd>
+
+	<dt>Estado:</dt>
+	<dd><?php echo $usuario['estado']; ?></dd>
+
+	
+	<dt>Telefone</dt>
+	<dd><?php echo $usuario['telefone']; ?></dd>
+</dl>
+
+
+
+<div id="actions" class="row">
+	<div class="col-md-12">
+	  <a href="edit.php?id=<?php echo $usuario['id']; ?>" class="btn btn-primary">Editar</a>
+	  <a href="index.php" class="btn btn-default">Voltar</a>
+	</div>
+</div>
+
+<?php include(FOOTER_TEMPLATE); ?>
+
+```
+
+26 - Para criar a função de exclusão do sistema, como de costume vamos ao functions.php dentro da pasta usuarios e vamos adicionar o código a seguir:
+
+```php
+
+<?php
+
+function delete($id = null) {
+  global $usuario;
+  $usuario = remove('usuarios', $id);
+  header('location: index.php');
+}
+```
+
+27 - Para que fique mais "seguro" criaremos uma janela modal para quando o usuario excluir um registro, a pagina responder com uma confirmação neste modal. Para isto dentro da pasta usuarios crie um arquivo chamado modal.php e dentro dele cole o codigo a seguir:
+
+```php
+div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modalLabel">Excluir Item</h4>
+      </div>
+      <div class="modal-body">
+        Deseja realmente excluir este item?
+      </div>
+      <div class="modal-footer">
+        <a id="confirm" class="btn btn-primary" href="#">Sim</a>
+        <a id="cancel" class="btn btn-default" data-dismiss="modal">N&atilde;o</a>
+      </div>
+    </div>
+  </div>
+</div> <!-- /.modal -->
+
+```
+
+28 -  Não podemos esquecer de implementar no index.php da pasta de usuarios este modal. Para isso Basta calocar a marcação a seguir antes do footer:
+
+```php
+<?php include('modal.php'); ?>
+```
+
+29 -  Para que o evento acorra precisamos criar um arquivo dentro da pasta js chamado main.js, ele passará os dados deste evento e puxará a função de exlusão.Cole o código a seguir.
+
+```php
+/**
+ * Passa os dados do cliente para o Modal, e atualiza o link para exclusão
+ */
+$('#delete-modal').on('show.bs.modal', function (event) {
+  
+  var button = $(event.relatedTarget);
+  var id = button.data('usuario');
+  
+  var modal = $(this);
+  modal.find('.modal-title').text('Excluir Cliente #' + id);
+  modal.find('#confirm').attr('href', 'delete.php?id=' + id);
+})
+
+```
+
+30 - Vamos agora abrir nosso "querido" functions.php dentro de usuarios e criar a função de exclusão, basta colar o código a seguir:
+
+```php
+<?php 
+  require_once('functions.php'); 
+  if (isset($_GET['id'])){
+    delete($_GET['id']);
+  } else {
+    die("ERRO: ID não definido.");
+  }
+?>
+```
+
+31 - Para finalizar vamos Implementar essa exclusão no banco de dados com o seguinte código :
+
+
+FIM
+
+OBS: com a mudança dos nomes de tabelas, diretorios ou base dados os respectivos nomes devem ser mudados no codigo também.
+
+
       
 
 
