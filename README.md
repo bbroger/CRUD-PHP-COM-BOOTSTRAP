@@ -13,7 +13,7 @@ para mais informações : http://www.devmedia.com.br/introducao-ao-padrao-mvc/29
 4 - Entre no phpmyadmin e crie uma base de dados : CREATE DATABASE crud-php;
 
 5 - Crie a tabela "usuarios" onde serão cadastrados alguns usuários do sistema :
-'''php
+ ```php
 CREATE TABLE usuarios (
   id int(11) NOT NULL,
   nome varchar(255) NOT NULL,
@@ -30,7 +30,8 @@ ALTER TABLE usuarios
 ALTER TABLE usuarios
 MODIFY id int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
-'''
+
+```
 
 6 - Crie um arquivo config.php na raiz do seu projeto, est arquivo conterá todo código "genérico" do sistema para ser usado em outros diretórios e arquivos. Dentro de config.php cole o código a seguir:
 
@@ -94,6 +95,9 @@ function close_database($conn) {
 	}
 ?>
       Acesse: http://localhost/crud-bootstrap-php
+      
+      `
+
       
 
 
