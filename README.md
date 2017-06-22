@@ -748,6 +748,7 @@ $('#delete-modal').on('show.bs.modal', function (event) {
 
 31 - Para finalizar vamos Implementar essa exclusão no banco de dados com o seguinte código :
 
+```php
 function remove( $table = null, $id = null ) {
   $database = open_database();
 	
@@ -767,6 +768,8 @@ function remove( $table = null, $id = null ) {
   close_database($database);
 }
 
+```
+
 
 FIM
 
@@ -774,8 +777,8 @@ OBS: com a mudança dos nomes de tabelas, diretorios ou base dados os respectivo
 
 Referências :
 
-https://www.youtube.com/watch?v=XHwcqbU9Z60
-http://getbootstrap.com/getting-started/#download
+ - https://www.youtube.com/watch?v=XHwcqbU9Z60
+ - http://getbootstrap.com/getting-started/#download
 
 
       
