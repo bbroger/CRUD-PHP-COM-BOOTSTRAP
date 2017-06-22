@@ -35,6 +35,7 @@ MODIFY id int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 6 - Crie um arquivo config.php na raiz do seu projeto, est arquivo conterá todo código "genérico" do sistema para ser usado em outros diretórios e arquivos. Dentro de config.php cole o código a seguir:
 
+```php
 <?php
 
 define('DB_NAME', 'crud-php');
@@ -56,7 +57,8 @@ if ( !defined('BASEURL') )
 if ( !defined('DBAPI') )
 	define('DBAPI', ABSPATH . 'inc/database.php');
   ?>
-  
+```
+```php  
 7 - Crie um Arquivo chamado database.php dentro da sua paste inc, esse arquuivo conterá todos os códigos de acesso ao banco de dados. Depois de criado cole o código a seguir:
 
 <?php
@@ -78,7 +80,8 @@ function close_database($conn) {
 	}
 }
 ?>
-
+```
+```php  
 8 - Crie um Arquivo index.php na raiz do seu projeto. Cole o código a seguir para confirmar que o banco de dados está conectado com o seu projeto:
 
 
@@ -96,7 +99,7 @@ function close_database($conn) {
 ?>
       Acesse: http://localhost/crud-bootstrap-php
       
-      `
+ ```     `
 
       
 
