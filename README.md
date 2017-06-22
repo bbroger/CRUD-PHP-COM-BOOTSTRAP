@@ -2,7 +2,7 @@ Será Assumido neste tutorial que você já possui instalado na máquina os segu
 - XAMPP ou PHP e Dependencias 
 - MYSQL
 - MYSQL WorkBanch
-Será usado neste tutorial o formato MVC para esse crud
+- Será usado neste tutorial o formato MVC para esse crud
 
 para mais informações : http://www.devmedia.com.br/introducao-ao-padrao-mvc/29308
 
@@ -98,9 +98,10 @@ function close_database($conn) {
 		echo '<h1>ERRO: Não foi possível Conectar!</h1>';
 	}
 ?>
-      Acesse: http://localhost/crud-bootstrap-php
+     
       
  ```  
+  Acesse: http://localhost/crud-bootstrap-php
  
 9 - Crie um arquivo header.php dentro da paste inc que terá todos os arquivos do header do seu sistema que será reaproveitado. Dentro do Arquivo cole o codigo de marcação html a seguir:
 
