@@ -748,10 +748,34 @@ $('#delete-modal').on('show.bs.modal', function (event) {
 
 31 - Para finalizar vamos Implementar essa exclusão no banco de dados com o seguinte código :
 
+function remove( $table = null, $id = null ) {
+  $database = open_database();
+	
+  try {
+    if ($id) {
+      $sql = "DELETE FROM " . $table . " WHERE id = " . $id;
+      $result = $database->query($sql);
+      if ($result = $database->query($sql)) {   	
+        $_SESSION['message'] = "Registro Removido com Sucesso.";
+        $_SESSION['type'] = 'success';
+      }
+    }
+  } catch (Exception $e) { 
+    $_SESSION['message'] = $e->GetMessage();
+    $_SESSION['type'] = 'danger';
+  }
+  close_database($database);
+}
+
 
 FIM
 
 OBS: com a mudança dos nomes de tabelas, diretorios ou base dados os respectivos nomes devem ser mudados no codigo também.
+
+Referências :
+
+https://www.youtube.com/watch?v=XHwcqbU9Z60
+http://getbootstrap.com/getting-started/#download
 
 
       
