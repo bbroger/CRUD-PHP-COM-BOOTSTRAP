@@ -7,7 +7,9 @@ Será Assumido neste tutorial que você já possui instalado na máquina os segu
 para mais informações : http://www.devmedia.com.br/introducao-ao-padrao-mvc/29308
 
 1 - Baixe o arquivo do Bootstrap em : http://getbootstrap.com/ 
+
 2 - Crie um Diretório chamado crud-bootstrap-php e descompacte a o bootstrap dentro dele
+
 3 - Crie uma Pasta inc dentro do seu diretório principal, nela colocaremos todo código PHP que será reaproveitado.
 
 4 - Entre no phpmyadmin e crie uma base de dados : CREATE DATABASE crud-php;
