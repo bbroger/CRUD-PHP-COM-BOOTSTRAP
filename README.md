@@ -370,9 +370,233 @@ function find_all( $table ) {
 </table>
 
 <?php include(FOOTER_TEMPLATE); ?>
+
+
+```
+17 - Entre no Phpmyadmin e popule um pouco a sua tabela para ver se o index.php dos usuarios está puxando todas as informaçes. Use o código:
+
+```php
+INSERT INTO `usuarios` (`id`, `nome`, `cpf`, `cidade`, `estado`, 
+`telefone`) 
+VALUES ('0', 'usuario1', '000000', '000000', '000000', '000000');
+
+```
+18 - Vamos Para dentro da Paste Usuarios e vamos  adicionar a função de adicionar. No arquivo functions.php cole o código a seguir:
+
+```php
+<?php
+
+function add() {
+  if (!empty($_POST['usuario'])) {
+    
+    
+    $usuario = $_POST['usuario'];
+   
+    
+    save('usuarios', $usuario);
+    header('location: index.php');
+  }
+}
+?>
+```
+19 - Uma vez com a função implementada vamos abrir a pasta usuarios e vamos criar o arquivo add.php, neste arquivo colocaremos todos os formularios para adicionar um usuario. Cole o código a seguir:
+
+```php
+<?php 
+  require_once('functions.php'); 
+  add();
+?>
+
+<?php include(HEADER_TEMPLATE); ?>
+
+<h2>Novo Cliente</h2>
+
+<form action="add.php" method="post">
+  <!-- area de campos do form -->
+  <hr />
+  <div class="row">
+    <div class="form-group col-md-7">
+      <label for="nome">Nome</label>
+      <input type="text" class="form-control" name="usuario['nome']">
+    </div>
+
+    <div class="form-group col-md-3">
+      <label for="campo2">CPF</label>
+      <input type="text" class="form-control" name="usuario['cpf']">
+    </div>
+
+    <div class="form-group col-md-2">
+      <label for="campo3">Cidade</label>
+      <input type="text" class="form-control" name="usuario['cidade']">
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="form-group col-md-5">
+      <label for="campo1">Estado</label>
+      <input type="text" class="form-control" name="usuario['estado']">
+    </div>
+
+    <div class="form-group col-md-3">
+      <label for="campo2">Telefone</label>
+      <input type="text" class="form-control" name="usuario['telefone']">
+    </div>
+    </div>
+    
+   
+   <div id="actions" class="row">
+    <div class="col-md-12">
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <a href="index.php" class="btn btn-default">Cancelar</a>
+    </div>
+  </div>
+</form>
+
+<?php include(FOOTER_TEMPLATE); ?>
+```
+20 - Para finalizar a dição de usuario iremos agora implementar todo esses comandos no arquivo database.php. Cole o seguinte código:
+```php
+<?php
+
+function save($table = null, $data = null) {
+  $database = open_database();
+  $columns = null;
+  $values = null;
+  //print_r($data);
+  foreach ($data as $key => $value) {
+    $columns .= trim($key, "'") . ",";
+    $values .= "'$value',";
+  }
+  // remove a ultima virgula
+  $columns = rtrim($columns, ',');
+  $values = rtrim($values, ',');
+  
+  $sql = "INSERT INTO " . $table . "($columns)" . " VALUES " . "($values);";
+  try {
+    $database->query($sql);
+    $_SESSION['message'] = 'Registro cadastrado com sucesso.';
+    $_SESSION['type'] = 'success';
+  
+  } catch (Exception $e) { 
+  
+    $_SESSION['message'] = 'Nao foi possivel realizar a operacao.';
+    $_SESSION['type'] = 'danger';
+  } 
+  close_database($database);
+}
+?>
 ```
 
+21 - Agora vamos criar a função de update do sistema. Primeiro no Arquivo functions.php cole o seguinte código
 
+```php
+<?php
+
+function edit() {
+  
+  if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    if (isset($_POST['usuario'])) {
+      $usuario = $_POST['usuario'];
+      
+      update('usuarios', $id, $usuario);
+      header('location: index.php');
+    } else {
+      global $usuario;
+      $usuario = find('usuarios', $id);
+    } 
+  } else {
+    header('location: index.php');
+  }
+}
+
+
+
+```
+
+22 - Vamos criar a função de Edição agora. Crie um arquivo edit.php na pasta usuarios e cole o código a seguie:
+
+```php
+<?php 
+  require_once('functions.php'); 
+  edit();
+?>
+
+<?php include(HEADER_TEMPLATE); ?>
+
+<h2>Atualizar Cliente</h2>
+
+<form action="edit.php?id=<?php echo $usuario['id']; ?>" method="post">
+  <hr />
+  <div class="row">
+    <div class="form-group col-md-7">
+      <label for="name">Nome</label>
+      <input type="text" class="form-control" name="usuario['nome']" value="<?php echo $usuario['nome']; ?>">
+    </div>
+
+    <div class="form-group col-md-3">
+      <label for="campo2">CPF</label>
+      <input type="text" class="form-control" name="usuario['cpf']" value="<?php echo $usuario['cpf']; ?>">
+    </div>
+
+    <div class="form-group col-md-2">
+      <label for="campo3">Cidade</label>
+      <input type="text" class="form-control" name="usuario['cidade']" value="<?php echo $usuario['cidade']; ?>">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-5">
+      <label for="campo1">Estado</label>
+      <input type="text" class="form-control" name="usuario['estado']" value="<?php echo $usuario['estado']; ?>">
+    </div>
+
+    <div class="form-group col-md-3">
+      <label for="campo2">Telefone</label>
+      <input type="text" class="form-control" name="usuario['telefone']" value="<?php echo $usuario['telefone']; ?>">
+    </div>
+
+    
+
+  </div>
+  <div id="actions" class="row">
+    <div class="col-md-12">
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <a href="index.php" class="btn btn-default">Cancelar</a>
+    </div>
+  </div>
+</form>
+
+<?php include(FOOTER_TEMPLATE); ?>
+
+23 - Vamos Implementar a edição no banco de dados. Abra o database.php e cole o código a seguir:
+
+```php
+
+<?php
+
+function update($table = null, $id = 0, $data = null) {
+  $database = open_database();
+  $items = null;
+  foreach ($data as $key => $value) {
+    $items .= trim($key, "'") . "='$value',";
+  }
+  // remove a ultima virgula
+  $items = rtrim($items, ',');
+  $sql  = "UPDATE " . $table;
+  $sql .= " SET $items";
+  $sql .= " WHERE id=" . $id . ";";
+  try {
+    $database->query($sql);
+    $_SESSION['message'] = 'Registro atualizado com sucesso.';
+    $_SESSION['type'] = 'success';
+  } catch (Exception $e) { 
+    $_SESSION['message'] = 'Nao foi possivel realizar a operacao.';
+    $_SESSION['type'] = 'danger';
+  } 
+  close_database($database);
+}
+
+```
       
 
 
